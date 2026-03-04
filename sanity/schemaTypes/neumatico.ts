@@ -18,11 +18,27 @@ export const neumatico = {
           { title: 'Industriales', value: 'industriales' },
         ],
       },
-      // Cambié Rule por (rule) en minúscula para evitar el error de TypeScript
       validation: (rule: any) => rule.required()
     },
     { name: 'precio', title: 'Precio', type: 'number' },
     { name: 'stock', title: 'Stock', type: 'number' },
     { name: 'imagen', title: 'Imagen', type: 'image' },
+    // --- NUEVOS CAMPOS AGREGADOS ---
+    {
+      name: 'oferta',
+      title: '¿Mostrar en Ofertas Principal?',
+      type: 'boolean',
+      initialValue: false, // Por defecto no es oferta
+    },
+    {
+      name: 'slug',
+      title: 'Slug (Enlace)',
+      type: 'slug',
+      options: {
+        source: 'modelo', // Genera el link basado en el modelo
+        maxLength: 96,
+      },
+      validation: (rule: any) => rule.required()
+    },
   ],
 }
