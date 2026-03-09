@@ -13,8 +13,8 @@ export function Navbar() {
       <div className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-full items-center justify-between px-8 py-1.5 text-[10px] md:text-xs font-medium">
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5"><Phone className="h-3 w-3" /> (011) 4567-8900</span>
-            <span className="hidden sm:flex items-center gap-1.5"><MapPin className="h-3 w-3" /> Av. Corrientes 1234, CABA</span>
+            <span className="flex items-center gap-1.5"><Phone className="h-3 w-3" /> (2262) 225731</span>
+            <span className="hidden sm:flex items-center gap-1.5"><MapPin className="h-3 w-3" /> Necochea provincia Buenos Aires, Argentina.</span>
           </div>
           <span className="uppercase tracking-widest text-[10px]">Envios a todo el pais</span>
         </div>
