@@ -15,16 +15,20 @@ const client = createClient({
   useCdn: false,
 })
 
-// Forzamos a que Next.js sepa que esta página es dinámica
+// Forzamos renderizado dinámico para evitar errores de cache
 export const dynamic = 'force-dynamic'
 
-export default async function Home(props: {
+// Definimos los tipos correctamente para Next.js 15
+interface PageProps {
   searchParams: Promise<{ cat?: string }>
-}) {
-  // Requisito de Next.js 15: esperar los parámetros
+}
+
+export default async function Home(props: PageProps) {
+  // CLAVE: Esperamos a que los searchParams se resuelvan
   const searchParams = await props.searchParams;
   const categoriaSeleccionada = searchParams.cat;
 
+  // Pedimos los datos a Sanity
   const neumaticosRaw = await client.fetch(`*[_type == "neumatico"]{
     _id, marca, modelo, precio, medida, stock, categoria, "imagenUrl": imagen.asset->url
   }`)
@@ -60,19 +64,19 @@ export default async function Home(props: {
           <div className="container mx-auto px-4 max-w-5xl text-center">
             <h2 className="text-3xl font-bold mb-12">Contacto APR Neumáticos</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <a href="https://wa.me/5492262225731" target="_blank" className="p-6 bg-background rounded-xl border border-border">
+              <a href="https://wa.me/5492262225731" target="_blank" className="p-6 bg-background rounded-xl border border-border hover:shadow-lg transition-all">
                 <MessageCircle className="w-10 h-10 text-green-500 mx-auto mb-2" />
                 <span className="block font-bold">WhatsApp</span>
               </a>
-              <a href="https://instagram.com/aprneumaticoss" target="_blank" className="p-6 bg-background rounded-xl border border-border">
+              <a href="https://instagram.com/aprneumaticoss" target="_blank" className="p-6 bg-background rounded-xl border border-border hover:shadow-lg transition-all">
                 <Instagram className="w-10 h-10 text-pink-500 mx-auto mb-2" />
                 <span className="block font-bold">Instagram</span>
               </a>
-              <a href="tel:+5492262225731" className="p-6 bg-background rounded-xl border border-border">
+              <a href="tel:+5492262225731" className="p-6 bg-background rounded-xl border border-border hover:shadow-lg transition-all">
                 <Phone className="w-10 h-10 text-blue-500 mx-auto mb-2" />
                 <span className="block font-bold">Llamar</span>
               </a>
-              <a href="mailto:info@aprneumaticos.com.ar" className="p-6 bg-background rounded-xl border border-border">
+              <a href="mailto:info@aprneumaticos.com.ar" className="p-6 bg-background rounded-xl border border-border hover:shadow-lg transition-all">
                 <Mail className="w-10 h-10 text-red-500 mx-auto mb-2" />
                 <span className="block font-bold">Email</span>
               </a>
