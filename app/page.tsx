@@ -18,15 +18,19 @@ const client = createClient({
 // Forzamos renderizado dinámico para evitar errores de cache
 export const dynamic = 'force-dynamic'
 
-// Definimos los tipos correctamente para Next.js 15
+// Tipado exacto compatible con Next.js 15 de manera estricta
 interface PageProps {
-  searchParams: Promise<{ cat?: string }>
+  params: Promise<Record<string, string | string[] | undefined>>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function Home(props: PageProps) {
-  // CLAVE: Esperamos a que los searchParams se resuelvan
-  const searchParams = await props.searchParams;
-  const categoriaSeleccionada = searchParams.cat;
+  // CLAVE: Esperamos a que los searchParams se resuelvan correctamente
+  const searchParams = await props.searchParams
+  const cat = searchParams.cat
+  
+  // Nos aseguramos de tratar la categoría como string si existe
+  const categoriaSeleccionada = typeof cat === 'string' ? cat : undefined
 
   // Pedimos los datos a Sanity
   const neumaticosRaw = await client.fetch(`*[_type == "neumatico"]{
