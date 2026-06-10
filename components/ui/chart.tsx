@@ -125,6 +125,7 @@ function ChartTooltipContent({
     indicator?: 'line' | 'dot' | 'dashed'
     nameKey?: string
     labelKey?: string
+    payload?: any[] // Corrección de tipo para evitar conflictos con Recharts
   }) {
   const { config } = useChart()
 
