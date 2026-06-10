@@ -111,13 +111,13 @@ function ChartTooltipContent({
   indicator = 'dot',
   hideLabel = false,
   hideIndicator = false,
-  label,
   labelFormatter,
   labelClassName,
   formatter,
   color,
   nameKey,
   labelKey,
+  ...props
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
   React.ComponentProps<'div'> & {
     hideLabel?: boolean
@@ -125,9 +125,13 @@ function ChartTooltipContent({
     indicator?: 'line' | 'dot' | 'dashed'
     nameKey?: string
     labelKey?: string
-    payload?: any[] // Corrección de tipo para evitar conflictos con Recharts
+    payload?: any[]
+    label?: any
   }) {
   const { config } = useChart()
+
+  // Extraemos la propiedad label de forma segura puenteando el tipo estricto
+  const label = (props as any).label
 
   const tooltipLabel = React.useMemo(() => {
     if (hideLabel || !payload?.length) {
@@ -257,11 +261,12 @@ function ChartLegendContent({
   payload,
   verticalAlign = 'bottom',
   nameKey,
-}: React.ComponentProps<'div'> &
-  Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign'> & {
-    hideIcon?: boolean
-    nameKey?: string
-  }) {
+}: React.ComponentProps<'div'> & {
+  hideIcon?: boolean
+  nameKey?: string
+  payload?: any[]
+  verticalAlign?: 'top' | 'bottom' | 'middle'
+}) {
   const { config } = useChart()
 
   if (!payload?.length) {
@@ -305,7 +310,6 @@ function ChartLegendContent({
   )
 }
 
-// Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,
@@ -351,4 +355,3 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
-}
