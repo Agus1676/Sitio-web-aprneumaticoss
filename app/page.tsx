@@ -15,22 +15,21 @@ const client = createClient({
   useCdn: false,
 })
 
-// Forzamos renderizado dinámico para evitar errores de cache
 export const dynamic = 'force-dynamic'
 
-// Tipado exacto compatible con Next.js 15 de manera estricta
+// Solución híbrida: Acepta tanto un objeto directo (Next 14) como una Promesa (Next 15)
 interface PageProps {
-  params: Promise<Record<string, string | string[] | undefined>>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  params?: any
+  searchParams: { cat?: string } | Promise<{ cat?: string }>
 }
 
 export default async function Home(props: PageProps) {
-  // CLAVE: Esperamos a que los searchParams se resuelvan correctamente
-  const searchParams = await props.searchParams
-  const cat = searchParams.cat
-  
-  // Nos aseguramos de tratar la categoría como string si existe
-  const categoriaSeleccionada = typeof cat === 'string' ? cat : undefined
+  // Desestructuramos o resolvemos la promesa dependiendo de qué versión de Next lo corra
+  const resolvedSearchParams = props.searchParams instanceof Promise 
+    ? await props.searchParams 
+    : props.searchParams
+
+  const categoriaSeleccionada = resolvedSearchParams?.cat
 
   // Pedimos los datos a Sanity
   const neumaticosRaw = await client.fetch(`*[_type == "neumatico"]{
